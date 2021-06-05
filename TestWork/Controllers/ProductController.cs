@@ -22,27 +22,30 @@ namespace TestWork.Controllers
         }
 
         [HttpGet("ProductsType")]
-        public IEnumerable<ProductType> GetProductTypes()
+        [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 100)]
+        public async Task<IEnumerable<ProductType>> GetProductTypes()
         {
-            var productType = _context.ProductTypes;
+            var productType = await _context.ProductTypes.ToListAsync();
             return productType;
         }
 
         [HttpGet("Products")]
-        public IEnumerable<Product> GetProducts(Guid? productType = null, bool? availableProduct = null, bool? sortPrice = null)
+        [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 100)]
+        public async Task<IEnumerable<Product>> GetProducts(Guid? productType = null, bool? availableProduct = null, bool? sortPrice = null)
         {
-            IQueryable<Product> products = _context.Products.Include(pt => pt.ProductType);
+            var listProducts = await _context.Products.Include(pt => pt.ProductType).ToListAsync();
+            IQueryable<Product> products = listProducts.AsQueryable();
             if (productType != null && productType != Guid.Empty)
                 products.Where(x => x.ProductType.Id == productType);
             if ((availableProduct == true) && (availableProduct != null))
-                products.OrderBy(x => x.CountProduct);
+                products = products.Where(x => x.CountProduct > 0);
             if (sortPrice == true && sortPrice != null)
                 products.OrderBy(x => x.PriceProduct);
             return products;
         }
 
-        [HttpPost("Product")]
-        public async Task<IActionResult> PostProduct([FromBody] Product product)
+        [HttpPost("AddProduct")]
+        public async Task<IActionResult> AddProduct([FromBody] Product product)
         {
             if (product is null)
             {
@@ -54,8 +57,8 @@ namespace TestWork.Controllers
             return CreatedAtAction(nameof(GetProducts), product);
         }
         // POST api/<HomeController>/product
-        [HttpPost("ProductType")]
-        public async Task<IActionResult> PostProductType([FromBody] ProductType productType)
+        [HttpPost("AddProductType")]
+        public async Task<IActionResult> AddProductType([FromBody] ProductType productType)
         {
             await _context.ProductTypes.AddAsync(productType);
             await _context.SaveChangesAsync();

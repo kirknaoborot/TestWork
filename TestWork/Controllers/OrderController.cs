@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +22,10 @@ namespace TestWork.Controllers
         }
 
         [HttpGet("Orders")]
-        public IEnumerable<Order> GetOrders([FromBody] Client client, DateTime dateStart, DateTime dateEnd)
+        [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 300)]
+        public async Task<IEnumerable<Order>> GetOrders([FromBody] Client client, DateTime dateStart, DateTime dateEnd)
         {
-            var orders = _context.Orders.Where(x => x.Client == client && x.CreateOrder >= dateStart && x.CreateOrder <= dateEnd).OrderBy(x => x.CreateOrder);
+            var orders = await _context.Orders.Where(x => x.Client == client && x.CreateOrder >= dateStart && x.CreateOrder <= dateEnd).OrderBy(x => x.CreateOrder).ToListAsync();
             return orders;
         }
 

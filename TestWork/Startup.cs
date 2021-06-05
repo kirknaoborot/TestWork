@@ -35,6 +35,7 @@ namespace TestWork
             services.AddRouting();
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer());
             services.AddControllersWithViews();
+            services.AddMemoryCache();
             services.AddScoped<IUserService, UserService>();
             services.AddSwaggerGen(c=>
             {
