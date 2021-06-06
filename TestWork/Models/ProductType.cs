@@ -11,7 +11,7 @@ namespace TestWork.Models
         /// <summary>
         /// Идентификатор типа
         /// </summary>
-        public Guid Id { get; private set; } = Guid.NewGuid();
+        public Guid Id { get; set; } = Guid.NewGuid();
         /// <summary>
         /// Название типа товара
         /// </summary>

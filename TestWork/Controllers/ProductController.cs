@@ -60,6 +60,10 @@ namespace TestWork.Controllers
         [HttpPost("AddProductType")]
         public async Task<IActionResult> AddProductType([FromBody] ProductType productType)
         {
+            if (productType is null)
+            {
+                throw new ArgumentNullException(nameof(productType));
+            }
             await _context.ProductTypes.AddAsync(productType);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetProductTypes), productType);

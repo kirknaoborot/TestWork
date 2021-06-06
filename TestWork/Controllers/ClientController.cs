@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using TestWork.Models;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TestWork.Controllers
 {
@@ -35,6 +34,10 @@ namespace TestWork.Controllers
         [HttpPost("AddClient")]
         public async Task<IActionResult> AddClient([FromBody] Client client)
         {
+            if (client is null)
+            {
+                throw new Exception(nameof(client));
+            }
             await _context.Clients.AddAsync(client);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetClients), client);

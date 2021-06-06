@@ -10,7 +10,7 @@ namespace TestWork.Models
         /// <summary>
         /// Идентификатор клиента
         /// </summary>
-        public Guid Id { get; private set;} = Guid.NewGuid();
+        public Guid Id { get; set;} = Guid.NewGuid();
         /// <summary>
         /// Имя клиента
         /// </summary>

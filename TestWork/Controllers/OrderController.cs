@@ -21,30 +21,45 @@ namespace TestWork.Controllers
             _context = context;
         }
 
-        [HttpGet("Orders")]
-        [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 300)]
-        public async Task<IEnumerable<Order>> GetOrders([FromBody] Client client, DateTime dateStart, DateTime dateEnd)
+        [HttpGet("{clientId}/{dateStart}/{dateEnd}")]
+
+        public async Task<IEnumerable<Order>> GetOrders(Guid clientId, DateTime dateStart, DateTime dateEnd)
         {
-            var orders = await _context.Orders.Where(x => x.Client == client && x.CreateOrder >= dateStart && x.CreateOrder <= dateEnd).OrderBy(x => x.CreateOrder).ToListAsync();
+            var orders = await _context.Orders.Where(x => x.Client.Id == clientId && x.CreateOrder >= dateStart && x.CreateOrder <= dateEnd).OrderBy(x => x.CreateOrder).Include(cl=>cl.Client).ToListAsync();
             return orders;
         }
 
-        //[HttpPost("FormationOrder")]
-        //public async Task<IActionResult> PostFromationOrder([FromBody]Client client, [FromBody]Product product, int count)
-        //{
-        //    PositionOrder positionOrder = new PositionOrder()
-        //    {
-        //        Count = count,
-        //        Price = product.PriceProduct * count,
-        //        Product = product,
-        //        Order = new Order { Client = client, CreateOrder = DateTime.Now.Date }
-        //    };
-        //    product.CountProduct = product.CountProduct - count;
-        //    await _context.Orders.AddAsync(positionOrder.Order);
-        //    await _context.PositionOrders.AddAsync(positionOrder);
-        //    _context.Products.Update(product);
-        //    await _context.SaveChangesAsync();
-        //    return CreatedAtAction(nameof(GetProductTypes),client);
-        //}
+        [HttpPost("{clientId}/{productId}/{count}")]
+        public async Task<IActionResult> PostFromationOrder(Guid clientId, Guid productId, int count)
+        {
+            if (!BalanceProduct(productId).Result)
+                return BadRequest();
+            var product = await _context.Products.FirstAsync(x => x.Id == productId);
+            var client = await _context.Clients.FirstAsync(x => x.Id == clientId);
+
+            PositionOrder positionOrder = new PositionOrder()
+            {
+                Id = Guid.NewGuid(),
+                Count = count,
+                Price = product.PriceProduct * count,
+                Product = product,
+                Order = new Order
+                {
+                    Id = Guid.NewGuid(),
+                    Client = client,
+                    CreateOrder = DateTime.Now.Date
+                }
+            };
+            product.CountProduct -= count;
+            _context.Products.Update(product);
+            await _context.PositionOrders.AddAsync(positionOrder);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetOrders), positionOrder);
+        }
+
+        private async Task<bool> BalanceProduct(Guid productId)
+        {
+            return await _context.Products.AnyAsync(x => x.Id == productId);
+        }
     }
 }
