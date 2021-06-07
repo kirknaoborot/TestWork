@@ -7,18 +7,20 @@ namespace TestWork.Models
 {
     public class Product
     {
-        /// <summary>
-        /// Идентификатор товара 
-        /// </summary>
-        public Guid Id { get;  set; } = Guid.NewGuid();
+       /// <summary>
+       /// Идентификатор товара 
+       /// </summary>
+       public Guid Id { get;  set; } = Guid.NewGuid();
        /// <summary>
        ///Тип товара 
        /// </summary>
-       public ProductType ProductType { get; set; }
-       /// <summary>
-       /// Название товара
-       /// </summary>
-       public string NameProduct { get; set; }
+       public Guid ProductTypeId { get; set; }
+
+        public ProductType ProductType { get; set; }
+        /// <summary>
+        /// Название товара
+        /// </summary>
+        public string NameProduct { get; set; }
        /// <summary>
        /// Цена товара
        /// </summary>

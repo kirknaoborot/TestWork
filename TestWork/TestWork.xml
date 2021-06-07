@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TestWork</name>
+    </assembly>
+    <members>
+        <member name="T:TestWork.Controllers.ClientController">
+            <summary>
+            Контроллер работы с клиентами
+            </summary>
+        </member>
+        <member name="M:TestWork.Controllers.ClientController.#ctor(TestWork.Models.ApplicationContext)">
+            <summary>
+            Контроллер работы с клиентами
+            </summary>
+        </member>
+        <member name="M:TestWork.Controllers.ClientController.Get">
+            <summary>
+            Метод получения списка клиентов
+            </summary>
+            <returns>Список клиентов</returns>
+        </member>
+        <member name="M:TestWork.Controllers.ClientController.Post(TestWork.Models.Client)">
+            <summary>
+            Метод добавления клиента
+            </summary>
+            <param name="client">Клиент</param>
+            <returns></returns>
+        </member>
+        <member name="T:TestWork.Controllers.OrderController">
+            <summary>
+            Контроллер работы с заказами
+            </summary>
+        </member>
+        <member name="M:TestWork.Controllers.OrderController.#ctor(TestWork.Models.ApplicationContext)">
+            <summary>
+            Контроллер работы с заказами
+            </summary>
+            <param name="context">Контекст БД</param>
+        </member>
+        <member name="M:TestWork.Controllers.OrderController.Get(System.Guid,System.DateTime,System.DateTime)">
+            <summary>
+            Метод получения списка заказов
+            </summary>
+            <param name="clientId">Идентификатор клиента</param>
+            <param name="dateStart">MM.dd.YYYY выбрать с</param>
+            <param name="dateEnd">MM.dd.YYYY выбрать по</param>
+            <returns>Список заказов </returns>
+        </member>
+        <member name="M:TestWork.Controllers.OrderController.FromationOrder(System.Guid,System.Guid,System.Int32)">
+            <summary>
+            Метод добавления заказа
+            </summary>
+            <param name="clientId">Идентификатор клиента</param>
+            <param name="productId">Идентификатор продукта</param>
+            <param name="count">кол-во требуемого товара</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestWork.Controllers.OrderController.BalanceProduct(System.Guid,System.Int32)">
+            <summary>
+            Метод определения кол-ва товара на складе
+            </summary>
+            <param name="productId">Идентификатор товара</param>
+            <param name="count">кол-во требуемого товара</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestWork.Controllers.OrderController.SubtractProduct(TestWork.Models.Product,System.Int32)">
+            <summary>
+            Метод вычитания товара со склада
+            </summary>
+            <param name="product">Товар</param>
+            <param name="count">Кол-во товара</param>
+        </member>
+        <member name="T:TestWork.Controllers.ProductController">
+            <summary>
+            Контроллер работы с товаром
+            </summary>
+        </member>
+        <member name="M:TestWork.Controllers.ProductController.#ctor(TestWork.Models.ApplicationContext)">
+            <summary>
+            Контроллер работы с товаром
+            </summary>
+        </member>
+        <member name="M:TestWork.Controllers.ProductController.Get(System.Nullable{System.Guid},System.Nullable{System.Boolean},System.Nullable{System.Boolean})">
+            <summary>
+            Метод получения списка товаров
+            </summary>
+            <param name="productType">Тип продукта</param>
+            <param name="availableProduct">Наличие товара на складе</param>
+            <param name="sortPrice">Сортировать по цене</param>
+            <returns>Список товаров</returns>
+        </member>
+        <member name="M:TestWork.Controllers.ProductController.Post(TestWork.Infrastructure.AddProduct)">
+            <summary>
+            Метод добавления товаров
+            </summary>
+            <param name="addProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="T:TestWork.Controllers.ProductTypeController">
+            <summary>
+            Контроллер работы типа товаров
+            </summary>
+        </member>
+        <member name="M:TestWork.Controllers.ProductTypeController.#ctor(TestWork.Models.ApplicationContext)">
+            <summary>
+            Контроллер работы типа товаров
+            </summary>
+        </member>
+        <member name="M:TestWork.Controllers.ProductTypeController.Get">
+            <summary>
+            Метод получения типов товара
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TestWork.Controllers.ProductTypeController.Post(TestWork.Models.ProductType)">
+            <summary>
+            Метод добавления типа товара
+            </summary>
+            <param name="productType">Имя продукта</param>
+        </member>
+        <member name="P:TestWork.Models.Client.Id">
+            <summary>
+            Идентификатор клиента
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.Client.FirstName">
+            <summary>
+            Имя клиента
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.Client.LastName">
+            <summary>
+            Фамилия клиента
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.Client.MiddleName">
+            <summary>
+            Отчество
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.Order.Id">
+            <summary>
+            Идентификатор заказа
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.Order.Client">
+            <summary>
+            Идентификатор клиента
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.Order.CreateOrder">
+            <summary>
+            Дата создания заказа
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.PositionOrder.Id">
+            <summary>
+            Идентификатор позиции
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.PositionOrder.Order">
+            <summary>
+            Заказ
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.PositionOrder.Product">
+            <summary>
+            Товар
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.PositionOrder.Price">
+            <summary>
+            Цена
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.PositionOrder.Count">
+            <summary>
+            Кол-во
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.Product.Id">
+            <summary>
+            Идентификатор товара 
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.Product.ProductTypeId">
+             <summary>
+            Тип товара 
+             </summary>
+        </member>
+        <member name="P:TestWork.Models.Product.NameProduct">
+            <summary>
+            Название товара
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.Product.PriceProduct">
+            <summary>
+            Цена товара
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.Product.CountProduct">
+            <summary>
+            Кол-во товара на складе
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.ProductType.Id">
+            <summary>
+            Идентификатор типа
+            </summary>
+        </member>
+        <member name="P:TestWork.Models.ProductType.NameType">
+            <summary>
+            Название типа товара
+            </summary>
+        </member>
+    </members>
+</doc>

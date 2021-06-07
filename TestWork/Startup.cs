@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using TestWork.IService;
@@ -35,11 +36,15 @@ namespace TestWork
             services.AddRouting();
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer());
             services.AddControllersWithViews();
-            services.AddMemoryCache();
             services.AddScoped<IUserService, UserService>();
             services.AddSwaggerGen(c=>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Тестовый сервис", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo 
+                { 
+                    Title = "Тестовый сервис", 
+                    Version = "v1",
+                    Contact = new OpenApiContact { Name = "Kirill Larkin", Email = "kirilllcit@gmail.com" }
+                });
                 c.AddSecurityDefinition("basic", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -62,6 +67,11 @@ namespace TestWork
                         new string[] {}
                     }
                 });
+
+                c.EnableAnnotations();
+
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "TestWork.xml");
+                c.IncludeXmlComments(filePath);
             });
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication",null);

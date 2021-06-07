@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System;
@@ -10,37 +11,48 @@ using TestWork.Models;
 
 namespace TestWork.Controllers
 {
+    /// <summary>
+    /// Контроллер работы с клиентами
+    /// </summary>
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ClientController : ControllerBase
     {
-        IMemoryCache _cache;
         ApplicationContext _context;
-
-        public ClientController(ApplicationContext context, IMemoryCache cache)
+        /// <summary>
+        /// Контроллер работы с клиентами
+        /// </summary>
+        public ClientController(ApplicationContext context)
         {
             _context = context;
-            _cache = cache;
         }
-
-        [HttpGet("Clients")]
-        [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 300)]
-        public async Task<IEnumerable<Client>> GetClients()
+        /// <summary>
+        /// Метод получения списка клиентов
+        /// </summary>
+        /// <returns>Список клиентов</returns>
+        [HttpGet]
+        [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 100)]
+        public async Task<IEnumerable<Client>> Get()
         {
             var clients = await _context.Clients.ToListAsync();
             return clients;
         }
-
-        [HttpPost("AddClient")]
-        public async Task<IActionResult> AddClient([FromBody] Client client)
+        /// <summary>
+        /// Метод добавления клиента
+        /// </summary>
+        /// <param name="client">Клиент</param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] Client client)
         {
             if (client is null)
             {
-                throw new Exception(nameof(client));
+                throw new ArgumentNullException(nameof(client));
             }
             await _context.Clients.AddAsync(client);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetClients), client);
+            return CreatedAtAction(nameof(Get), client);
         }
     }
 }
